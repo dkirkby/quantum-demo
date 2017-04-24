@@ -1,4 +1,4 @@
-# Quantum Mechanics Demonstrations
+# List of Available Demonstrations
 
 - Quantum coin: [app](https://dkirkby.github.io/quantum-coin/) &#124; [details](https://github.com/dkirkby/quantum-coin/blob/master/README.md)
 - Superposition of stationary states: [animated](media/superposition.gif) &#124; [spacetime](media/superposition_xt.png)
@@ -14,4 +14,4 @@
 - Azimuthal traveling waves in hydrogen stationary states: [animated](media/azimuthal.html)
 - Addition of angular momentum J = L+S for an electron (s=1/2) in a p-wave (ell=1): [image](media/jAdd.png)
 - [Table of 3D commutators](media/Commutators.pdf): Entry at row,col gives the commutator [row,col]. Hamiltonian commutators assume a central potential.
-- 3D probability densities of superpositions of hydrogen stationary states
+- 3D probability densities of superpositions of hydrogen stationary states (link will be added).
