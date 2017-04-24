@@ -1,10 +1,10 @@
 # Quantum Mechanics Demonstrations
 
-- Quantum coin: [app](https://dkirkby.github.io/quantum-coin/) | [details](https://github.com/dkirkby/quantum-coin/blob/master/README.md)
-- Superposition of stationary states: [animated](media/superposition.gif) | [spacetime](media/superposition_xt.png)
+- Quantum coin: [app](https://dkirkby.github.io/quantum-coin/) &#124; [details](https://github.com/dkirkby/quantum-coin/blob/master/README.md)
+- Superposition of stationary states: [animated](media/superposition.gif) &#124; [spacetime](media/superposition_xt.png)
 - Classical and quantum probability densities in harmonic oscillator potential: [animated](media/harmonic.gif)
 - Solutions to Schrödinger's equation in regions of constant potential: [animated](media/V0solns.gif)
-- Solutions to Schrödinger's equation in finite step potentials: [animated](media/stepPsi.gif) | [potentials](media/stepV.png)
+- Solutions to Schrödinger's equation in finite step potentials: [animated](media/stepPsi.gif) &#124; [potentials](media/stepV.png)
 - Graphical method to find bound state solutions: [animated](media/stepBound.gif)
 - Spherical harmonic decomposition of the earth's surface: [animated](media/topoYlm.html)
 - Probability densities of hydrogen stationary states in the (x,z) plane:
