@@ -1,6 +1,6 @@
 # List of Available Demonstrations
 
-- Quantum coin: [app](https://dkirkby.github.io/quantum-coin/) &#124; [details](https://github.com/dkirkby/quantum-coin/blob/master/README.md)
+- Quantum measurement with Schrödinger's coin: [app](https://dkirkby.github.io/quantum-coin/) &#124; [details](https://github.com/dkirkby/quantum-coin/blob/master/README.md)
 - Superposition of stationary states: [animated](media/superposition.gif) &#124; [spacetime](media/superposition_xt.png)
 - Classical and quantum probability densities in harmonic oscillator potential: [animated](media/harmonic.gif)
 - Solutions to Schrödinger's equation in regions of constant potential: [animated](media/V0solns.gif)
