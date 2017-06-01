@@ -10,7 +10,7 @@
 - Probability densities of hydrogen stationary states in the (x,z) plane:
   - [n = 1,2,3 states showing ±25 a0](media/hydrogen123.png)
   - [n = 4 states showing ±31.25 a0](media/hydrogen4.png)
-  - [Random nodal patterns](media/randomNodes.png) (try to guess the quantum numbers)
+  - [Random nodal patterns showing ±30 a0](media/randomNodes.png) (try to guess the quantum numbers)
 - Azimuthal traveling waves in hydrogen stationary states: [animated](media/azimuthal.html)
 - Addition of angular momentum J = L+S for an electron (s=1/2) in a p-wave (ell=1): [image](media/jAdd.png)
 - [Table of 3D commutators](media/Commutators.pdf): Entry at row,col gives the commutator [row,col]. Hamiltonian commutators assume a central potential.
