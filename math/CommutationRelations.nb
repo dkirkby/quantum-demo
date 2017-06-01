@@ -1,0 +1,1829 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     62539,       1820]
+NotebookOptionsPosition[     57501,       1653]
+NotebookOutlinePosition[     57860,       1669]
+CellTagsIndexPosition[     57817,       1666]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Commutation Relations", "Title",
+ CellChangeTimes->{{3.641729139317329*^9, 3.6417291439638863`*^9}}],
+
+Cell["\<\
+This is a good reference for some of the techniques used in this notebook: \
+http://mathematica.stackexchange.com/questions/22824/defining-a-non-\
+commutative-operator-algebra-in-mathematica\
+\>", "Text",
+ CellChangeTimes->{{3.6418275537854643`*^9, 3.641827585208695*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Non-commutative multiplication", "Section",
+ CellChangeTimes->{{3.641810842370961*^9, 3.6418108482747498`*^9}}],
+
+Cell[TextData[{
+ "The default multiplication in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " is commutative, but there is also a non-commutive ** form that we can use \
+for operators. However, we need to teach it some new tricks first."
+}], "Text",
+ CellChangeTimes->{{3.641732412997397*^9, 3.641732454723564*^9}, {
+  3.641733514060617*^9, 3.641733522665923*^9}, {3.641810861011818*^9, 
+  3.6418109114484997`*^9}, {3.641810963120183*^9, 3.6418109787580976`*^9}, {
+  3.641811057411577*^9, 3.64181106641084*^9}, {3.641811170488598*^9, 
+  3.641811196302022*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Prepare", " ", "to", " ", "customize", " ", "the", " ", "built", " ", 
+    "in", " ", "function"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Unprotect", "[", "NonCommutativeMultiply", "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Clear", " ", "any", " ", "previous", " ", "customization"}], " ",
+     "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"DownValues", "[", "NonCommutativeMultiply", "]"}], "=", 
+     RowBox[{"{", "}"}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.6418109869036427`*^9, 3.64181103226901*^9}}],
+
+Cell["Operator products are linear:", "Text",
+ CellChangeTimes->{{3.641811076354151*^9, 3.6418110833061457`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"NonCommutativeMultiply", "[", 
+   RowBox[{"A_Plus", ",", "B_"}], "]"}], ":=", 
+  RowBox[{"Plus", "@@", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"NonCommutativeMultiply", "[", 
+       RowBox[{"#", ",", "B"}], "]"}], "&"}], "/@", "A"}], ")"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"NonCommutativeMultiply", "[", 
+   RowBox[{"A_", ",", "B_Plus"}], "]"}], ":=", 
+  RowBox[{"Plus", "@@", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"NonCommutativeMultiply", "[", 
+       RowBox[{"A", ",", "#"}], "]"}], "&"}], "/@", "B"}], 
+    ")"}]}]}]}], "Input",
+ CellChangeTimes->{{3.641811086759265*^9, 3.641811108541635*^9}, {
+  3.6418112946124983`*^9, 3.6418113094821863`*^9}}],
+
+Cell["Numerical constants can be pulled out of operator products:", "Text",
+ CellChangeTimes->{{3.6418111127370043`*^9, 3.6418111292403507`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"NonCommutativeMultiply", "[", 
+   RowBox[{
+    RowBox[{"Times", "[", 
+     RowBox[{"c_", ",", "A__"}], "]"}], ",", "B_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"c", " ", 
+    RowBox[{"NonCommutativeMultiply", "[", 
+     RowBox[{
+      RowBox[{"Times", "[", "A", "]"}], ",", "B"}], "]"}]}], " ", "/;", " ", 
+   RowBox[{"NumberQ", "[", "c", "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"NonCommutativeMultiply", "[", 
+   RowBox[{"A_", ",", 
+    RowBox[{"Times", "[", 
+     RowBox[{"c_", ",", "B__"}], "]"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"c", " ", 
+    RowBox[{"NonCommutativeMultiply", "[", 
+     RowBox[{"A", ",", 
+      RowBox[{"Times", "[", "B", "]"}]}], "]"}]}], "/;", " ", 
+   RowBox[{"NumberQ", "[", "c", "]"}]}]}]}], "Input",
+ CellChangeTimes->{{3.64181128176479*^9, 3.641811342309103*^9}, {
+  3.6418119070139637`*^9, 3.6418119113512173`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"c_", "**", "A_"}], ":=", 
+  RowBox[{
+   RowBox[{"c", " ", "A"}], " ", "/;", " ", 
+   RowBox[{"NumberQ", "[", "c", "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"A_", "**", "c_"}], ":=", 
+  RowBox[{
+   RowBox[{"c", " ", "A"}], " ", "/;", " ", 
+   RowBox[{"NumberQ", "[", "c", "]"}]}]}]}], "Input",
+ CellChangeTimes->{{3.64181128176479*^9, 3.641811342309103*^9}, {
+  3.6418119070139637`*^9, 3.6418119113512173`*^9}, {3.6418141981521072`*^9, 
+  3.641814201194482*^9}, {3.6418142821597357`*^9, 3.6418143198875437`*^9}}],
+
+Cell["All done customizing.", "Text",
+ CellChangeTimes->{{3.641811095170856*^9, 3.641811101633284*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Protect", "[", "NonCommutativeMultiply", "]"}], ";"}]], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Tests", "Subsection",
+ CellChangeTimes->{{3.641811202597887*^9, 3.641811203453619*^9}, {
+  3.6418120662117*^9, 3.6418120667205753`*^9}}],
+
+Cell[TextData[{
+ "Use lower-case symbols for generic operators since many of the upper-case \
+letters (C,D,I,N,...) are already used by ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.641812302657712*^9, 3.641812338663546*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"a", "**", 
+  RowBox[{"(", 
+   RowBox[{"b", "+", "c"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.641811206588088*^9, 3.641811217966148*^9}, {
+  3.6418123419743357`*^9, 3.641812344536706*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "**", "b"}], "+", 
+  RowBox[{"a", "**", "c"}]}]], "Output",
+ CellChangeTimes->{3.641811218573691*^9, 3.6418113511277237`*^9, 
+  3.641811920406343*^9, 3.641812344860036*^9, 3.6418141436948347`*^9, 
+  3.641814325237936*^9, 3.6420882252971992`*^9, 3.642090480229466*^9, 
+  3.642366165268855*^9, 3.64297918306161*^9, 3.643559943517653*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{"a", "+", "b"}], ")"}], "**", 
+  RowBox[{"(", 
+   RowBox[{"c", "+", "d"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.6418112248841763`*^9, 3.641811239061534*^9}, {
+  3.641812346805768*^9, 3.6418123500961933`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "**", "c"}], "+", 
+  RowBox[{"a", "**", "d"}], "+", 
+  RowBox[{"b", "**", "c"}], "+", 
+  RowBox[{"b", "**", "d"}]}]], "Output",
+ CellChangeTimes->{3.641811239620973*^9, 3.641811351160528*^9, 
+  3.641811920435254*^9, 3.641812350392222*^9, 3.641814143724022*^9, 
+  3.64181432527055*^9, 3.642088225335825*^9, 3.642090480269528*^9, 
+  3.642366165306656*^9, 3.642979183079811*^9, 3.643559943555385*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"a", "**", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"-", "2"}], " ", "b"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.641811242140435*^9, 3.641811252525072*^9}, {
+  3.6418113607567*^9, 3.6418113727263403`*^9}, {3.641812353029171*^9, 
+  3.641812355119768*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "2"}], " ", 
+  RowBox[{"a", "**", "b"}]}]], "Output",
+ CellChangeTimes->{{3.641811248964518*^9, 3.641811253083494*^9}, {
+   3.641811351194714*^9, 3.64181137531593*^9}, 3.641811920452221*^9, 
+   3.641812355552109*^9, 3.6418141437415133`*^9, 3.641814325302927*^9, 
+   3.642088225367838*^9, 3.6420904803014174`*^9, 3.642366165341134*^9, 
+   3.642979183112454*^9, 3.64355994358911*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"a", "**", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"-", "2"}], "b"}], ")"}], "**", "c"}]], "Input",
+ CellChangeTimes->{{3.641814233808796*^9, 3.641814237432877*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "2"}], " ", 
+  RowBox[{"a", "**", "b", "**", "c"}]}]], "Output",
+ CellChangeTimes->{3.641814238038295*^9, 3.6418143253368063`*^9, 
+  3.642088225402059*^9, 3.642090480322959*^9, 3.6423661653728933`*^9, 
+  3.642979183145605*^9, 3.643559943622569*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{"a", "+", "b"}], ")"}], "**", 
+  RowBox[{"(", 
+   RowBox[{"a", "-", "b"}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.641811377618121*^9, 3.6418113854646*^9}, {
+  3.641812358141811*^9, 3.641812361479751*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "**", "a"}], "-", 
+  RowBox[{"a", "**", "b"}], "+", 
+  RowBox[{"b", "**", "a"}], "-", 
+  RowBox[{"b", "**", "b"}]}]], "Output",
+ CellChangeTimes->{3.6418113864965982`*^9, 3.6418119204853163`*^9, 
+  3.641812361780604*^9, 3.641814143773898*^9, 3.641814325369808*^9, 
+  3.6420882254340467`*^9, 3.642090480355723*^9, 3.6423661654047318`*^9, 
+  3.642979183179179*^9, 3.643559943655632*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{"a", "-", "a"}], ")"}], "**", "b"}]], "Input",
+ CellChangeTimes->{{3.6418143323227377`*^9, 3.64181437805223*^9}}],
+
+Cell[BoxData["0"], "Output",
+ CellChangeTimes->{{3.641814336447608*^9, 3.641814378521196*^9}, 
+   3.642088225468686*^9, 3.642090480403718*^9, 3.642366165441949*^9, 
+   3.6429791832131157`*^9, 3.643559943688323*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"a", "**", 
+  RowBox[{"(", "2", ")"}], "**", "b"}]], "Input",
+ CellChangeTimes->{{3.6418143654085083`*^9, 3.641814371108528*^9}}],
+
+Cell[BoxData[
+ RowBox[{"2", " ", 
+  RowBox[{"a", "**", "b"}]}]], "Output",
+ CellChangeTimes->{3.641814371507814*^9, 3.642088225500853*^9, 
+  3.6420904804349546`*^9, 3.642366165472786*^9, 3.642979183246004*^9, 
+  3.643559943733941*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Define the commutation identities for an associative algebra", "Section",
+ CellChangeTimes->{{3.641729332950715*^9, 3.6417293383575983`*^9}, {
+  3.6417309404135*^9, 3.641730947762631*^9}}],
+
+Cell[TextData[{
+ "Now we define the commutator of arbitrary operator expressions that are \
+composed with **. The general strategy is to define the miminal set of simple \
+rules and then let ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " apply them repeatedly to reduce expressions to their final form."
+}], "Text",
+ CellChangeTimes->{{3.641811868023245*^9, 3.641811888958654*^9}, {
+  3.6418129645786047`*^9, 3.64181302238505*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "ctor", "]"}]], "Input",
+ CellChangeTimes->{{3.6417299672983217`*^9, 3.641729969363435*^9}}],
+
+Cell["Expand linear expressions on either side:", "Text",
+ CellChangeTimes->{{3.641729988441259*^9, 3.641730004176497*^9}, {
+  3.641732520155694*^9, 3.641732530104702*^9}, {3.641811857319894*^9, 
+  3.6418118609193983`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"A_", ",", 
+    RowBox[{"B_", "+", "C_"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"ctor", "[", 
+    RowBox[{"A", ",", "B"}], "]"}], "+", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"A", ",", "C"}], "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{
+    RowBox[{"A_", "+", "B_"}], ",", "C_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"ctor", "[", 
+    RowBox[{"A", ",", "C"}], "]"}], "+", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"B", ",", "C"}], "]"}]}]}]}], "Input",
+ CellChangeTimes->{{3.641729981956876*^9, 3.641730031900546*^9}}],
+
+Cell["\<\
+Pull out any commuting (numerical) coefficients on either side:\
+\>", "Text",
+ CellChangeTimes->{{3.641730502744522*^9, 3.641730511104452*^9}, {
+  3.6417325354751453`*^9, 3.641732582431096*^9}, {3.641811937326335*^9, 
+  3.641811938844384*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{
+    RowBox[{"c_", " ", "A_"}], ",", "B_"}], "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{"c", " ", 
+    RowBox[{"ctor", "[", 
+     RowBox[{"A", ",", "B"}], "]"}]}], " ", "/;", " ", 
+   RowBox[{"NumberQ", "[", "c", "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"A_", ",", 
+    RowBox[{"c_", " ", "B_"}]}], "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{"c", " ", 
+    RowBox[{"ctor", "[", 
+     RowBox[{"A", ",", "B"}], "]"}]}], " ", "/;", " ", 
+   RowBox[{"NumberQ", "[", "c", "]"}]}]}]}], "Input",
+ CellChangeTimes->{{3.641730512744891*^9, 3.6417305512645473`*^9}}],
+
+Cell["\<\
+Put commutators of products in a standard form with the larger product on the \
+right:\
+\>", "Text",
+ CellChangeTimes->{{3.641730595293517*^9, 3.641730617853096*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"A_NonCommutativeMultiply", ",", "B_NonCommutativeMultiply"}], 
+   "]"}], ":=", 
+  RowBox[{
+   RowBox[{"-", 
+    RowBox[{"ctor", "[", 
+     RowBox[{"B", ",", "A"}], "]"}]}], "/;", " ", 
+   RowBox[{
+    RowBox[{"Length", "[", 
+     RowBox[{"Level", "[", 
+      RowBox[{"A", ",", 
+       RowBox[{"{", "1", "}"}]}], "]"}], "]"}], ">", 
+    RowBox[{"Length", "[", 
+     RowBox[{"Level", "[", 
+      RowBox[{"B", ",", 
+       RowBox[{"{", "1", "}"}]}], "]"}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.641730620224169*^9, 3.641730620941922*^9}, {
+   3.641730661070977*^9, 3.641730693909127*^9}, {3.641732608927453*^9, 
+   3.641732621226796*^9}, {3.641733291361349*^9, 3.64173329927986*^9}, {
+   3.641733364794735*^9, 3.641733386527153*^9}, {3.6417334542543983`*^9, 
+   3.6417334557184896`*^9}, {3.6417336358394547`*^9, 3.641733666733589*^9}, {
+   3.64173683363883*^9, 3.641736853248561*^9}, {3.641736889523129*^9, 
+   3.6417368923801117`*^9}, {3.641736980808926*^9, 3.641736989916958*^9}, 
+   3.641737394422661*^9, {3.6417375482970953`*^9, 3.641737553458541*^9}, {
+   3.641812167190748*^9, 3.641812179734353*^9}, {3.641812213257305*^9, 
+   3.6418122393684998`*^9}, {3.64181269702738*^9, 3.641812709404623*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"A_NonCommutativeMultiply", ",", 
+    RowBox[{"B", ":", 
+     RowBox[{"Except", "[", "_NonCommutativeMultiply", "]"}]}]}], "]"}], ":=", 
+  RowBox[{"-", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"B", ",", "A"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.641812732699162*^9, 3.641812808472953*^9}}],
+
+Cell["\<\
+Remove one factor from a non-commuting product in the right-hand operator:\
+\>", "Text",
+ CellChangeTimes->{{3.641730766785462*^9, 3.641730791127633*^9}, {
+  3.641732633112101*^9, 3.6417326411173887`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"A_", ",", 
+    RowBox[{"B_", "**", "C_"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"ctor", "[", 
+     RowBox[{"A", ",", "B"}], "]"}], "**", "C"}], "+", 
+   RowBox[{"B", " ", "**", 
+    RowBox[{"ctor", "[", 
+     RowBox[{"A", ",", "C"}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.641730793207378*^9, 3.64173084406284*^9}, {
+  3.6417313658080187`*^9, 3.64173136657607*^9}, {3.641731404311112*^9, 
+  3.641731480551838*^9}, {3.641732644205174*^9, 3.641732652715146*^9}, {
+  3.641732790696579*^9, 3.641732791327236*^9}, {3.641812855085718*^9, 
+  3.641812856823427*^9}}],
+
+Cell["\<\
+Put commutators that cannot be further reduced into a canonical ordering:\
+\>", "Text",
+ CellChangeTimes->{{3.641732205363953*^9, 3.641732229442259*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{
+    RowBox[{"A", ":", 
+     RowBox[{"Except", "[", "_NonCommutativeMultiply", "]"}]}], ",", 
+    RowBox[{"B", ":", 
+     RowBox[{"Except", "[", "_NonCommutativeMultiply", "]"}]}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"-", 
+    RowBox[{"ctor", "[", 
+     RowBox[{"B", ",", "A"}], "]"}]}], "/;", 
+   RowBox[{"!", 
+    RowBox[{"OrderedQ", "[", 
+     RowBox[{"{", 
+      RowBox[{"A", ",", "B"}], "}"}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6417322313866987`*^9, 3.641732251506476*^9}, {
+  3.64173346598203*^9, 3.641733483036372*^9}, {3.641733650164616*^9, 
+  3.6417336620940332`*^9}, {3.641813038737176*^9, 3.641813041795168*^9}}],
+
+Cell["\<\
+All the rules above transform commutator expressions into new commutator \
+expressions. Finally, we add the only rule that lets us eliminate a \
+commutator in the general case. An operator always commutes with itself:\
+\>", "Text",
+ CellChangeTimes->{{3.6417308890534143`*^9, 3.641730903428186*^9}, {
+  3.641813154324586*^9, 3.641813272480641*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"A_", ",", "A_"}], "]"}], ":=", "0"}]], "Input",
+ CellChangeTimes->{{3.641730905001525*^9, 3.641730908484714*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Tests", "Subsection",
+ CellChangeTimes->{{3.641812073832358*^9, 3.641812074328309*^9}}],
+
+Cell[TextData[{
+ "Use lower-case symbols for generic operators since many of the upper-case \
+letters (C,D,I,N,...) are already used by ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.641812302657712*^9, 3.641812338663546*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{
+   RowBox[{"a", "-", "b"}], ",", 
+   RowBox[{"c", "-", 
+    RowBox[{"2", "d"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.64181210632171*^9, 3.641812123023964*^9}, {
+  3.641812370519191*^9, 3.641812375038982*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{"a", ",", "c"}], "]"}], "-", 
+  RowBox[{"2", " ", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"a", ",", "d"}], "]"}]}], "-", 
+  RowBox[{"ctor", "[", 
+   RowBox[{"b", ",", "c"}], "]"}], "+", 
+  RowBox[{"2", " ", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"b", ",", "d"}], "]"}]}]}]], "Output",
+ CellChangeTimes->{{3.6418121114922247`*^9, 3.641812123709096*^9}, 
+   3.641812375692329*^9, 3.641812723485942*^9, 3.641813105846217*^9, 
+   3.64181328304841*^9, 3.641813344999398*^9, 3.64208823191826*^9, 
+   3.6420904842524023`*^9, 3.642366171727119*^9, 3.642979186668798*^9, 
+   3.6435599472197523`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{
+   RowBox[{"a", "**", "b"}], ",", "c"}], "]"}]], "Input",
+ CellChangeTimes->{{3.641812828724545*^9, 3.641812832456336*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "**", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"b", ",", "c"}], "]"}]}], "+", 
+  RowBox[{
+   RowBox[{"ctor", "[", 
+    RowBox[{"a", ",", "c"}], "]"}], "**", "b"}]}]], "Output",
+ CellChangeTimes->{3.641812832852622*^9, 3.641812889784855*^9, 
+  3.6418131120608463`*^9, 3.6418132890875463`*^9, 3.641813345018834*^9, 
+  3.642088231958057*^9, 3.642090484289427*^9, 3.642366171761004*^9, 
+  3.6429791867148647`*^9, 3.643559947258671*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{
+   RowBox[{"a", "**", "b", "**", "c"}], ",", 
+   RowBox[{"d", "**", "e"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.641812247005851*^9, 3.641812253739362*^9}, {
+  3.64181241599572*^9, 3.641812422950068*^9}, {3.641812900588933*^9, 
+  3.6418129186696033`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "**", "b", "**", "d", "**", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"c", ",", "e"}], "]"}]}], "+", 
+  RowBox[{"a", "**", "b", "**", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"c", ",", "d"}], "]"}], "**", "e"}], "+", 
+  RowBox[{"a", "**", "d", "**", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"b", ",", "e"}], "]"}], "**", "c"}], "+", 
+  RowBox[{"a", "**", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"b", ",", "d"}], "]"}], "**", "e", "**", "c"}], "+", 
+  RowBox[{"d", "**", 
+   RowBox[{"ctor", "[", 
+    RowBox[{"a", ",", "e"}], "]"}], "**", "b", "**", "c"}], "+", 
+  RowBox[{
+   RowBox[{"ctor", "[", 
+    RowBox[{"a", ",", "d"}], "]"}], "**", "e", "**", "b", "**", 
+   "c"}]}]], "Output",
+ CellChangeTimes->{
+  3.641812254159624*^9, {3.641812423910363*^9, 3.641812426208885*^9}, 
+   3.64181271961803*^9, 3.641812827823148*^9, {3.641812894412466*^9, 
+   3.641812919156733*^9}, 3.641813117181706*^9, 3.641813291095571*^9, 
+   3.641813345048235*^9, 3.642088232007563*^9, 3.642090484339424*^9, 
+   3.6423661717949247`*^9, 3.64297918674832*^9, 3.643559947292531*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{"b", ",", "a"}], "]"}]], "Input",
+ CellChangeTimes->{{3.6418131237608*^9, 3.6418131295424833`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"-", 
+  RowBox[{"ctor", "[", 
+   RowBox[{"a", ",", "b"}], "]"}]}]], "Output",
+ CellChangeTimes->{{3.641813126227639*^9, 3.641813129924617*^9}, 
+   3.641813292977023*^9, 3.641813345066937*^9, 3.642088232057873*^9, 
+   3.642090484388823*^9, 3.642366171827883*^9, 3.6429791867826*^9, 
+   3.6435599473534327`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{
+   RowBox[{"a", "-", "b"}], ",", 
+   RowBox[{"a", "+", "b"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6418132975896482`*^9, 3.64181333361348*^9}}],
+
+Cell[BoxData[
+ RowBox[{"2", " ", 
+  RowBox[{"ctor", "[", 
+   RowBox[{"a", ",", "b"}], "]"}]}]], "Output",
+ CellChangeTimes->{
+  3.641813301445651*^9, {3.6418133341559973`*^9, 3.64181334509648*^9}, 
+   3.642088232091329*^9, 3.642090484439809*^9, 3.6423661718608837`*^9, 
+   3.64297918683313*^9, 3.643559947392009*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{"a", ",", "a"}], "]"}]], "Input",
+ CellChangeTimes->{{3.641813305045074*^9, 3.64181330624857*^9}}],
+
+Cell[BoxData["0"], "Output",
+ CellChangeTimes->{3.641813306549045*^9, 3.641813345133789*^9, 
+  3.642088232140871*^9, 3.642090484489666*^9, 3.642366171895352*^9, 
+  3.642979186882728*^9, 3.6435599474241247`*^9}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["QM canonical commutators", "Section",
+ CellChangeTimes->{{3.6417361730647306`*^9, 3.6417361806476192`*^9}}],
+
+Cell["\<\
+Define the canonical commuation relations of quantum mechanics.  We only need \
+to do this for the [px,x] forms since the rules above automatically transform \
+[x,px] into -[px,x].\
+\>", "Text",
+ CellChangeTimes->{{3.6418135942470493`*^9, 3.641813649843947*^9}, {
+  3.6418138792282543`*^9, 3.641813885843874*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{
+    RowBox[{"P", "[", "i_", "]"}], ",", 
+    RowBox[{"R", "[", "j_", "]"}]}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"-", "I"}], " ", "\[HBar]", " ", 
+   RowBox[{"KroneckerDelta", "[", 
+    RowBox[{"i", ",", "j"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.641736211437738*^9, 3.641736229539044*^9}, {
+  3.641736420409215*^9, 3.641736442519567*^9}}],
+
+Cell["\<\
+Components of R commute with themselves and similarly for components of P:\
+\>", "Text",
+ CellChangeTimes->{{3.641813683634637*^9, 3.641813700330274*^9}, {
+  3.641813875396364*^9, 3.641813875540277*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{
+    RowBox[{"R", "[", "i_", "]"}], ",", 
+    RowBox[{"R", "[", "j_", "]"}]}], "]"}], ":=", 
+  "0"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ctor", "[", 
+   RowBox[{
+    RowBox[{"P", "[", "i_", "]"}], ",", 
+    RowBox[{"P", "[", "j_", "]"}]}], "]"}], ":=", "0"}]}], "Input",
+ CellChangeTimes->{{3.64173643238111*^9, 3.641736469631214*^9}, {
+  3.641813890741498*^9, 3.6418138925489693`*^9}}],
+
+Cell["Put products of R (P) components into a canonical ordering:", "Text",
+ CellChangeTimes->{{3.6418156314422617`*^9, 3.6418156785436497`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Unprotect", "[", "NonCommutativeMultiply", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"R", "[", "i_", "]"}], "**", 
+   RowBox[{"R", "[", "j_", "]"}]}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"R", "[", "j", "]"}], "**", 
+    RowBox[{"R", "[", "i", "]"}]}], "/;", 
+   RowBox[{"!", 
+    RowBox[{"OrderedQ", "[", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "j"}], "}"}], "]"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"P", "[", "i_", "]"}], "**", 
+   RowBox[{"P", "[", "j_", "]"}]}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"P", "[", "j", "]"}], "**", 
+    RowBox[{"P", "[", "i", "]"}]}], "/;", 
+   RowBox[{"!", 
+    RowBox[{"OrderedQ", "[", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "j"}], "}"}], "]"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Protect", "[", "NonCommutativeMultiply", "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.641815584349403*^9, 3.641815607620759*^9}, {
+  3.641815705154508*^9, 3.6418157464866743`*^9}, {3.642090125696184*^9, 
+  3.642090177686193*^9}, {3.64209047287589*^9, 3.642090473402128*^9}}],
+
+Cell[TextData[{
+ "We need to tell ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " that hbar is a number, so can be pulled out of expressions:"
+}], "Text",
+ CellChangeTimes->{{3.641813704257729*^9, 3.641813726913316*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"NumberQ", "[", "\[HBar]", "]"}], "^=", "True"}], ";"}]], "Input",
+ CellChangeTimes->{{3.641736343058509*^9, 3.641736367965042*^9}, 
+   3.641813735745903*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Applications", "Section",
+ CellChangeTimes->{{3.641813752425478*^9, 3.6418137554404182`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Define operators derived from the components of R and P", "Subsection",
+ CellChangeTimes->{{3.642089424158463*^9, 3.642089436444853*^9}}],
+
+Cell["Define the angular momentum operators:", "Text",
+ CellChangeTimes->{{3.641814453409511*^9, 3.641814461832008*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"L", "[", "1", "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"R", "[", "2", "]"}], "**", 
+     RowBox[{"P", "[", "3", "]"}]}], "-", 
+    RowBox[{
+     RowBox[{"R", "[", "3", "]"}], "**", 
+     RowBox[{"P", "[", "2", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"L", "[", "2", "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"R", "[", "3", "]"}], "**", 
+     RowBox[{"P", "[", "1", "]"}]}], "-", 
+    RowBox[{
+     RowBox[{"R", "[", "1", "]"}], "**", 
+     RowBox[{"P", "[", "3", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"L", "[", "3", "]"}], "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"R", "[", "1", "]"}], "**", 
+     RowBox[{"P", "[", "2", "]"}]}], "-", 
+    RowBox[{
+     RowBox[{"R", "[", "2", "]"}], "**", 
+     RowBox[{"P", "[", "1", "]"}]}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6418144641278753`*^9, 3.6418145206713133`*^9}}],
+
+Cell["\<\
+Commutators involving angular momentum will get reduced to expressions of \
+products like R[i]**P[j], so define a function that tries to rewrite these in \
+terms of angular momentum components:\
+\>", "Text",
+ CellChangeTimes->{{3.6420882932179956`*^9, 3.642088401102461*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "toLL", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"toLL", "[", "expr_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"expr", "//.", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"R", "[", "2", "]"}], "**", 
+        RowBox[{"P", "[", "3", "]"}]}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"LL", "[", "1", "]"}], "+", 
+        RowBox[{
+         RowBox[{"R", "[", "3", "]"}], "**", 
+         RowBox[{"P", "[", "2", "]"}]}]}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"R", "[", "3", "]"}], "**", 
+        RowBox[{"P", "[", "1", "]"}]}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"LL", "[", "2", "]"}], "+", 
+        RowBox[{
+         RowBox[{"R", "[", "1", "]"}], "**", 
+         RowBox[{"P", "[", "3", "]"}]}]}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"R", "[", "1", "]"}], "**", 
+        RowBox[{"P", "[", "2", "]"}]}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"LL", "[", "3", "]"}], "+", 
+        RowBox[{
+         RowBox[{"R", "[", "2", "]"}], "**", 
+         RowBox[{"P", "[", "1", "]"}]}]}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+        RowBox[{"different", " ", "components", " ", "of", " ", "R"}], ",", 
+        RowBox[{"P", " ", "commute"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"P", "[", "3", "]"}], "**", 
+        RowBox[{"R", "[", "2", "]"}]}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"LL", "[", "1", "]"}], "+", 
+        RowBox[{
+         RowBox[{"R", "[", "3", "]"}], "**", 
+         RowBox[{"P", "[", "2", "]"}]}]}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"P", "[", "1", "]"}], "**", 
+        RowBox[{"R", "[", "3", "]"}]}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"LL", "[", "2", "]"}], "+", 
+        RowBox[{
+         RowBox[{"R", "[", "1", "]"}], "**", 
+         RowBox[{"P", "[", "3", "]"}]}]}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"P", "[", "2", "]"}], "**", 
+        RowBox[{"R", "[", "1", "]"}]}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"LL", "[", "3", "]"}], "+", 
+        RowBox[{
+         RowBox[{"R", "[", "2", "]"}], "**", 
+         RowBox[{"P", "[", "1", "]"}]}]}]}]}], "\[IndentingNewLine]", "}"}]}],
+    "//", "Simplify"}]}]}], "Input",
+ CellChangeTimes->{{3.64208840760643*^9, 3.6420885150522614`*^9}, {
+  3.6420888648892803`*^9, 3.642088869274311*^9}, {3.642088905609467*^9, 
+  3.642088956380252*^9}}],
+
+Cell["Define the raising and lowering operators:", "Text",
+ CellChangeTimes->{{3.641814812669609*^9, 3.641814817340467*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Lp", "=", 
+   RowBox[{
+    RowBox[{"L", "[", "1", "]"}], "+", 
+    RowBox[{"I", " ", 
+     RowBox[{"L", "[", "2", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Lm", "=", 
+   RowBox[{
+    RowBox[{"L", "[", "1", "]"}], "-", 
+    RowBox[{"I", " ", 
+     RowBox[{"L", "[", "2", "]"}]}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.641814826246253*^9, 3.641814849804454*^9}}],
+
+Cell["Define the L^2 operator:", "Text",
+ CellChangeTimes->{{3.6418149272326603`*^9, 3.641814931000744*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"L2", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"L", "[", "1", "]"}], "**", 
+     RowBox[{"L", "[", "1", "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"L", "[", "2", "]"}], "**", 
+     RowBox[{"L", "[", "2", "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"L", "[", "3", "]"}], "**", 
+     RowBox[{"L", "[", "3", "]"}]}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6418149322179193`*^9, 3.641814947321495*^9}}],
+
+Cell["Define the R^2 and P^2 operators:", "Text",
+ CellChangeTimes->{{3.64181389824368*^9, 3.641813916634993*^9}, {
+  3.64181504847147*^9, 3.64181505170056*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"P2", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"P", "[", "1", "]"}], "**", 
+     RowBox[{"P", "[", "1", "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"P", "[", "2", "]"}], "**", 
+     RowBox[{"P", "[", "2", "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"P", "[", "3", "]"}], "**", 
+     RowBox[{"P", "[", "3", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"R2", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"R", "[", "1", "]"}], "**", 
+     RowBox[{"R", "[", "1", "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"R", "[", "2", "]"}], "**", 
+     RowBox[{"R", "[", "2", "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"R", "[", "3", "]"}], "**", 
+     RowBox[{"R", "[", "3", "]"}]}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6418139183431177`*^9, 3.6418139383332787`*^9}, {
+  3.641815055589953*^9, 3.641815069660989*^9}}],
+
+Cell["\<\
+Use P2 + R2 as a proxy for the Hamiltonian of a system with a central \
+potential, since it has the same commutation relations:\
+\>", "Text",
+ CellChangeTimes->{{3.641815108771885*^9, 3.641815132369945*^9}, {
+  3.64181520439293*^9, 3.641815210567357*^9}, {3.641815332581904*^9, 
+  3.6418153360831347`*^9}, {3.64181577279005*^9, 3.641815778556447*^9}, {
+  3.642095420879592*^9, 3.642095424653756*^9}, {3.642095476821734*^9, 
+  3.642095478022966*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"H", "=", 
+   RowBox[{"P2", "+", "R2"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.641815135292284*^9, 3.641815140636013*^9}, {
+  3.641815220743922*^9, 3.6418152240637083`*^9}, {3.641815340399706*^9, 
+  3.6418153407750683`*^9}, {3.641815782493237*^9, 3.6418157870175056`*^9}, {
+  3.64209542856686*^9, 3.6420954326197844`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Calculate pair-wise commutators", "Subsection",
+ CellChangeTimes->{{3.642089466492867*^9, 3.6420894733715878`*^9}}],
+
+Cell["\<\
+Calcuate commutators for operators except P2 and L2, which give longer \
+expressions:\
+\>", "Text",
+ CellChangeTimes->{{3.6420906639903917`*^9, 3.642090703347743*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"operators", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"R", "[", "1", "]"}], ",", 
+     RowBox[{"R", "[", "2", "]"}], ",", 
+     RowBox[{"R", "[", "3", "]"}], ",", 
+     RowBox[{"P", "[", "1", "]"}], ",", 
+     RowBox[{"P", "[", "2", "]"}], ",", 
+     RowBox[{"P", "[", "3", "]"}], ",", 
+     RowBox[{"L", "[", "1", "]"}], ",", 
+     RowBox[{"L", "[", "2", "]"}], ",", "Lp", ",", "Lm", ",", 
+     RowBox[{"L", "[", "3", "]"}], ",", "H"}], "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{
+  3.642089593871318*^9, {3.642089626002944*^9, 3.642089666751998*^9}, {
+   3.642089726070478*^9, 3.642089740900133*^9}, {3.642089824564126*^9, 
+   3.6420898372733088`*^9}, {3.6420905167899513`*^9, 3.642090517067384*^9}, 
+   3.64209057733788*^9, {3.642090611122809*^9, 3.642090611431967*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"labels", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<X\>\"", ",", "\"\<Y\>\"", ",", "\"\<Z\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(P\), \(x\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(P\), \(y\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(P\), \(z\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(L\), \(x\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(L\), \(y\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(L\), \(+\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(L\), \(-\)]\)\>\"", ",", 
+     "\"\<\!\(\*SubscriptBox[\(L\), \(z\)]\)\>\"", ",", "\"\<H\>\""}], 
+    "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.642366260095038*^9, 3.642366319483519*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"commutators", "=", 
+   RowBox[{
+    RowBox[{"toLL", "[", 
+     RowBox[{"Outer", "[", 
+      RowBox[{"ctor", ",", "operators", ",", "operators"}], "]"}], "]"}], "/.",
+     " ", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"LL", "[", "i_", "]"}], "\[RuleDelayed]", 
+       RowBox[{"Subscript", "[", 
+        RowBox[{"\"\<L\>\"", ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"\"\<x\>\"", ",", "\"\<y\>\"", ",", "\"\<z\>\""}], "}"}], 
+          "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], "]"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"R", "[", "i_", "]"}], "\[RuleDelayed]", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\"\<X\>\"", ",", "\"\<Y\>\"", ",", "\"\<Z\>\""}], "}"}], 
+        "[", 
+        RowBox[{"[", "i", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Q_", "[", "1", "]"}], "+", 
+        RowBox[{"I", " ", 
+         RowBox[{"Q_", "[", "2", "]"}]}]}], "\[RuleDelayed]", 
+       RowBox[{"Subscript", "[", 
+        RowBox[{"Q", ",", "\"\<+\>\""}], "]"}]}], ",", "\[IndentingNewLine]", 
+      
+      RowBox[{
+       RowBox[{
+        RowBox[{"Q_", "[", "1", "]"}], "-", 
+        RowBox[{"I", " ", 
+         RowBox[{"Q_", "[", "2", "]"}]}]}], "\[RuleDelayed]", 
+       RowBox[{"Subscript", "[", 
+        RowBox[{"Q", ",", "\"\<-\>\""}], "]"}]}], ",", "\[IndentingNewLine]", 
+      
+      RowBox[{
+       RowBox[{"Q_", "[", "i_", "]"}], "\[RuleDelayed]", 
+       RowBox[{"Subscript", "[", 
+        RowBox[{"Q", ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"\"\<x\>\"", ",", "\"\<y\>\"", ",", "\"\<z\>\""}], "}"}], 
+          "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], "]"}]}]}], "\[IndentingNewLine]", 
+     "}"}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6420895215742817`*^9, 3.642089565361382*^9}, 
+   3.642089596519659*^9, {3.6420896825587597`*^9, 3.642089683814048*^9}, 
+   3.642090653713502*^9, {3.642366366379437*^9, 3.642366498567649*^9}, {
+   3.64236652877417*^9, 3.642366588380711*^9}, {3.642367361570304*^9, 
+   3.6423673743127537`*^9}, {3.6423676344296494`*^9, 3.642367735121212*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"commutators", ",", 
+   RowBox[{"TableHeadings", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"labels", ",", "labels"}], "}"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.642089569552834*^9, 3.642089572553398*^9}, {
+  3.642366206048481*^9, 3.642366234189663*^9}, {3.642366324987462*^9, 
+  3.642366326758009*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  TagBox[GridBox[{
+     {
+      StyleBox["\[Null]",
+       ShowStringCharacters->False], 
+      TagBox["\<\"X\"\>",
+       HoldForm], 
+      TagBox["\<\"Y\"\>",
+       HoldForm], 
+      TagBox["\<\"Z\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(P\\), \\(x\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(P\\), \\(y\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(P\\), \\(z\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(x\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(y\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(+\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(-\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(z\\)]\\)\"\>",
+       HoldForm], 
+      TagBox["\<\"H\"\>",
+       HoldForm]},
+     {
+      TagBox["\<\"X\"\>",
+       HoldForm], "0", "0", "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]"}], "0", "0", "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\<\"Z\"\>"}], " ", "\[HBar]"}], 
+      RowBox[{"\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"Y\"\>", " ", "\[HBar]"}], 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"x\"\>"]}]},
+     {
+      TagBox["\<\"Y\"\>",
+       HoldForm], "0", "0", "0", "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]"}], "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"X\"\>", " ", "\[HBar]"}], 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"y\"\>"]}]},
+     {
+      TagBox["\<\"Z\"\>",
+       HoldForm], "0", "0", "0", "0", "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]"}], 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"Y\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"X\"\>", " ", "\[HBar]"}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["R", "\<\"+\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["R", "\<\"-\"\>"]}], "0", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}]},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(P\\), \\(x\\)]\\)\"\>",
+       HoldForm], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]"}], "0", "0", "0", "0", 
+      "0", "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"y\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[ImaginaryI]", " ", "\<\"X\"\>", " ", 
+       "\[HBar]"}]},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(P\\), \\(y\\)]\\)\"\>",
+       HoldForm], "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]"}], "0", "0", "0", "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"x\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[ImaginaryI]", " ", "\<\"Y\"\>", " ", 
+       "\[HBar]"}]},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(P\\), \\(z\\)]\\)\"\>",
+       HoldForm], "0", "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]"}], "0", "0", "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"y\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"x\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["P", "\<\"+\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["P", "\<\"-\"\>"]}], "0", 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[ImaginaryI]", " ", "\<\"Z\"\>", " ", 
+       "\[HBar]"}]},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(x\\)]\\)\"\>",
+       HoldForm], "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"Y\"\>", " ", "\[HBar]"}], 
+      "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"y\"\>"]}], "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"y\"\>"]}], "0"},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(y\\)]\\)\"\>",
+       HoldForm], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"X\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"x\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], "0", 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"x\"\>"]}], "0"},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(+\\)]\\)\"\>",
+       HoldForm], 
+      RowBox[{"\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["R", "\<\"+\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["P", "\<\"+\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], "0", 
+      RowBox[{"2", " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["LL", "\<\"+\"\>"]}], "0"},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(-\\)]\\)\"\>",
+       HoldForm], 
+      RowBox[{
+       RowBox[{"-", "\<\"Z\"\>"}], " ", "\[HBar]"}], 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["R", "\<\"-\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["P", "\<\"-\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"z\"\>"]}], "0", 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["LL", "\<\"-\"\>"]}], "0"},
+     {
+      TagBox["\<\"\\!\\(\\*SubscriptBox[\\(L\\), \\(z\\)]\\)\"\>",
+       HoldForm], 
+      RowBox[{"\[ImaginaryI]", " ", "\<\"Y\"\>", " ", "\[HBar]"}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\<\"X\"\>", " ", "\[HBar]"}], 
+      "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"y\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"x\"\>"]}], "0", 
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"y\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       SubscriptBox["\<\"L\"\>", "\<\"x\"\>"]}], 
+      RowBox[{"\[HBar]", " ", 
+       SubscriptBox["LL", "\<\"+\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "\[HBar]"}], " ", 
+       SubscriptBox["LL", "\<\"-\"\>"]}], "0", "0"},
+     {
+      TagBox["\<\"H\"\>",
+       HoldForm], 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"x\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"y\"\>"]}], 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       SubscriptBox["P", "\<\"z\"\>"]}], 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\<\"X\"\>", " ", "\[HBar]"}], 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\<\"Y\"\>", " ", "\[HBar]"}], 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\<\"Z\"\>", " ", "\[HBar]"}], 
+      "0", "0", "0", "0", "0", "0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxDividers->{
+     "Columns" -> {False, True, {False}, False}, "ColumnsIndexed" -> {}, 
+      "Rows" -> {False, True, {False}, False}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[2.0999999999999996`]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}],
+   {OutputFormsDump`HeadedRows, OutputFormsDump`HeadedColumns}],
+  Function[BoxForm`e$, 
+   TableForm[
+   BoxForm`e$, 
+    TableHeadings -> {{
+      "X", "Y", "Z", "\!\(\*SubscriptBox[\(P\), \(x\)]\)", 
+       "\!\(\*SubscriptBox[\(P\), \(y\)]\)", 
+       "\!\(\*SubscriptBox[\(P\), \(z\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(x\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(y\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(+\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(-\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(z\)]\)", "H"}, {
+      "X", "Y", "Z", "\!\(\*SubscriptBox[\(P\), \(x\)]\)", 
+       "\!\(\*SubscriptBox[\(P\), \(y\)]\)", 
+       "\!\(\*SubscriptBox[\(P\), \(z\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(x\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(y\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(+\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(-\)]\)", 
+       "\!\(\*SubscriptBox[\(L\), \(z\)]\)", "H"}}]]]], "Output",
+ CellChangeTimes->{{3.6420895729622583`*^9, 3.642089600749301*^9}, {
+   3.642089632102582*^9, 3.6420896872867002`*^9}, {3.642089731973134*^9, 
+   3.642089745334482*^9}, {3.642089830396167*^9, 3.642089846487692*^9}, {
+   3.642090511329831*^9, 3.642090526049933*^9}, 3.642090582165634*^9, 
+   3.642090616029265*^9, 3.64209544174155*^9, 3.6420954827804823`*^9, 
+   3.642095515688518*^9, {3.642366218042536*^9, 3.642366235005602*^9}, 
+   3.642366327087339*^9, {3.6423664238866587`*^9, 3.642366444744875*^9}, 
+   3.642366505526684*^9, {3.6423665497464523`*^9, 3.642366591446981*^9}, 
+   3.642367377471903*^9, {3.642367646792796*^9, 3.642367674617248*^9}, 
+   3.642367738683483*^9, 3.643559958735117*^9}]
+}, Open  ]],
+
+Cell["\<\
+Calculate the commutator of L+ and L-, which isn\[CloseCurlyQuote]t included \
+in the table:\
+\>", "Text",
+ CellChangeTimes->{{3.643559968278681*^9, 3.643559982838942*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"toLL", "[", 
+  RowBox[{"ctor", "[", 
+   RowBox[{"Lp", ",", "Lm"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.643559985574464*^9, 3.643559999234251*^9}}],
+
+Cell[BoxData[
+ RowBox[{"2", " ", "\[HBar]", " ", 
+  RowBox[{"LL", "[", "3", "]"}]}]], "Output",
+ CellChangeTimes->{{3.6435599943011513`*^9, 3.643559999585088*^9}}]
+}, Open  ]],
+
+Cell["Calculate the commutators involving P2:", "Text",
+ CellChangeTimes->{{3.64209534620008*^9, 3.642095353647707*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"ctor", "[", 
+       RowBox[{"#", ",", "P2"}], "]"}], "&"}], ",", "operators"}], "]"}], "//",
+    "toLL"}], "//", "TableForm"}]], "Input",
+ CellChangeTimes->{{3.642092135444069*^9, 3.64209213572635*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  TagBox[GridBox[{
+     {
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"P", "[", "1", "]"}]}]},
+     {
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"P", "[", "2", "]"}]}]},
+     {
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"P", "[", "3", "]"}]}]},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"P", "[", "1", "]"}], "**", 
+          RowBox[{"R", "[", "1", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"P", "[", "2", "]"}], "**", 
+          RowBox[{"R", "[", "2", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"P", "[", "3", "]"}], "**", 
+          RowBox[{"R", "[", "3", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "1", "]"}], "**", 
+          RowBox[{"P", "[", "1", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "3", "]"}], "**", 
+          RowBox[{"P", "[", "3", "]"}]}]}], ")"}]}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}],
+   Column],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.6420921361784973`*^9, {3.6420956235952806`*^9, 3.64209562705618*^9}, 
+   3.6423666358736343`*^9, 3.643559958767441*^9}]
+}, Open  ]],
+
+Cell["None of the non-zero results involving L2 are simple:", "Text",
+ CellChangeTimes->{{3.642092112687306*^9, 3.6420921278938837`*^9}, 
+   3.6420953425456676`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"ctor", "[", 
+       RowBox[{"#", ",", "L2"}], "]"}], "&"}], ",", "operators"}], "]"}], "//",
+    "toLL"}], "//", "TableForm"}]], "Input",
+ CellChangeTimes->{{3.642091490332665*^9, 3.642091525576542*^9}, {
+  3.6420918623064117`*^9, 3.642091896670347*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  TagBox[GridBox[{
+     {
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"LL", "[", "2", "]"}], "**", 
+          RowBox[{"R", "[", "3", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"LL", "[", "3", "]"}], "**", 
+          RowBox[{"R", "[", "2", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "3", "]"}], "**", 
+          RowBox[{"LL", "[", "2", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"R", "[", "1", "]"}], "**", 
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "1", "]"}]}]}], ")"}]}]},
+     {
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{
+           RowBox[{"LL", "[", "1", "]"}], "**", 
+           RowBox[{"R", "[", "3", "]"}]}]}], "+", 
+         RowBox[{
+          RowBox[{"LL", "[", "3", "]"}], "**", 
+          RowBox[{"R", "[", "1", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "1", "]"}], "**", 
+          RowBox[{"LL", "[", "3", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"R", "[", "3", "]"}], "**", 
+          RowBox[{"P", "[", "3", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "3", "]"}], "**", 
+          RowBox[{"R", "[", "3", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}]}]}], ")"}]}]},
+     {
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"LL", "[", "1", "]"}], "**", 
+          RowBox[{"R", "[", "2", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"LL", "[", "2", "]"}], "**", 
+          RowBox[{"R", "[", "1", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"R", "[", "1", "]"}], "**", 
+          RowBox[{"LL", "[", "2", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"LL", "[", "1", "]"}]}]}], ")"}]}]},
+     {
+      RowBox[{"\[ImaginaryI]", " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"LL", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "3", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"LL", "[", "3", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"P", "[", "2", "]"}], "**", 
+          RowBox[{"LL", "[", "3", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"P", "[", "3", "]"}], "**", 
+          RowBox[{"LL", "[", "2", "]"}]}]}], ")"}]}]},
+     {
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"LL", "[", "1", "]"}], "**", 
+          RowBox[{"P", "[", "3", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"P", "[", "1", "]"}], "**", 
+          RowBox[{"LL", "[", "3", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"P", "[", "3", "]"}], "**", 
+          RowBox[{"LL", "[", "1", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"R", "[", "1", "]"}], "**", 
+          RowBox[{"P", "[", "1", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "1", "]"}], "**", 
+          RowBox[{"P", "[", "1", "]"}]}]}], ")"}]}]},
+     {
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "\[HBar]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"LL", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "1", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"P", "[", "1", "]"}], "**", 
+          RowBox[{"LL", "[", "2", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"P", "[", "2", "]"}], "**", 
+          RowBox[{"LL", "[", "1", "]"}]}], "-", 
+         RowBox[{
+          RowBox[{"R", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "3", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"R", "[", "3", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}], "**", 
+          RowBox[{"P", "[", "2", "]"}]}]}], ")"}]}]},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"},
+     {"0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}],
+   Column],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.6420914958646107`*^9, 3.642091526055789*^9}, {
+   3.642091878860914*^9, 3.64209189707624*^9}, 3.642095639526504*^9, 
+   3.642366642591007*^9, 3.643559958907419*^9}]
+}, Open  ]],
+
+Cell["Calculate the commutator of L2 and P2:", "Text",
+ CellChangeTimes->{{3.643560268027507*^9, 3.6435602737868357`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ctor", "[", 
+  RowBox[{"L2", ",", "P2"}], "]"}]], "Input",
+ CellChangeTimes->{{3.64356024061826*^9, 3.6435602460583982`*^9}}],
+
+Cell[BoxData["0"], "Output",
+ CellChangeTimes->{3.6435602464540863`*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1489, 1148},
+WindowMargins->{{Automatic, 117}, {Automatic, 102}},
+FrontEndVersion->"10.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 23, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 106, 1, 92, "Title"],
+Cell[689, 25, 282, 5, 30, "Text"],
+Cell[CellGroupData[{
+Cell[996, 34, 117, 1, 64, "Section"],
+Cell[1116, 37, 569, 11, 30, "Text"],
+Cell[1688, 50, 652, 17, 80, "Input"],
+Cell[2343, 69, 113, 1, 30, "Text"],
+Cell[2459, 72, 726, 21, 46, "Input"],
+Cell[3188, 95, 145, 1, 30, "Text"],
+Cell[3336, 98, 885, 24, 46, "Input"],
+Cell[4224, 124, 543, 13, 46, "Input"],
+Cell[4770, 139, 103, 1, 30, "Text"],
+Cell[4876, 142, 99, 2, 28, "Input"],
+Cell[CellGroupData[{
+Cell[5000, 148, 142, 2, 44, "Subsection"],
+Cell[5145, 152, 270, 7, 30, "Text"],
+Cell[CellGroupData[{
+Cell[5440, 163, 214, 5, 28, "Input"],
+Cell[5657, 170, 374, 7, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6068, 182, 263, 7, 28, "Input"],
+Cell[6334, 191, 436, 9, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6807, 205, 281, 7, 28, "Input"],
+Cell[7091, 214, 420, 8, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7548, 227, 189, 5, 28, "Input"],
+Cell[7740, 234, 287, 6, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8064, 245, 257, 7, 28, "Input"],
+Cell[8324, 254, 423, 9, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8784, 268, 164, 4, 28, "Input"],
+Cell[8951, 274, 214, 3, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9202, 282, 152, 3, 28, "Input"],
+Cell[9357, 287, 234, 5, 28, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9652, 299, 194, 2, 50, "Section"],
+Cell[9849, 303, 439, 9, 49, "Text"],
+Cell[10291, 314, 129, 2, 28, "Input"],
+Cell[10423, 318, 223, 3, 30, "Text"],
+Cell[10649, 323, 609, 19, 46, "Input"],
+Cell[11261, 344, 253, 5, 30, "Text"],
+Cell[11517, 351, 651, 19, 46, "Input"],
+Cell[12171, 372, 176, 4, 30, "Text"],
+Cell[12350, 378, 1267, 27, 28, "Input"],
+Cell[13620, 407, 352, 9, 28, "Input"],
+Cell[13975, 418, 215, 4, 30, "Text"],
+Cell[14193, 424, 638, 16, 28, "Input"],
+Cell[14834, 442, 163, 3, 30, "Text"],
+Cell[15000, 447, 695, 18, 28, "Input"],
+Cell[15698, 467, 358, 6, 30, "Text"],
+Cell[16059, 475, 173, 4, 28, "Input"],
+Cell[CellGroupData[{
+Cell[16257, 483, 93, 1, 44, "Subsection"],
+Cell[16353, 486, 270, 7, 30, "Text"],
+Cell[CellGroupData[{
+Cell[16648, 497, 262, 7, 28, "Input"],
+Cell[16913, 506, 646, 16, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17596, 527, 171, 4, 28, "Input"],
+Cell[17770, 533, 467, 11, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18274, 549, 306, 7, 28, "Input"],
+Cell[18583, 558, 1085, 26, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19705, 589, 146, 3, 28, "Input"],
+Cell[19854, 594, 332, 7, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20223, 606, 195, 5, 28, "Input"],
+Cell[20421, 613, 316, 7, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20774, 625, 145, 3, 28, "Input"],
+Cell[20922, 630, 210, 3, 70, "Output"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[21193, 640, 113, 1, 50, "Section"],
+Cell[21309, 643, 323, 6, 30, "Text"],
+Cell[21635, 651, 407, 11, 28, "Input"],
+Cell[22045, 664, 213, 4, 30, "Text"],
+Cell[22261, 670, 456, 13, 46, "Input"],
+Cell[22720, 685, 145, 1, 30, "Text"],
+Cell[22868, 688, 1123, 32, 80, "Input"],
+Cell[23994, 722, 227, 6, 30, "Text"],
+Cell[24224, 730, 204, 5, 28, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24465, 740, 99, 1, 50, "Section"],
+Cell[CellGroupData[{
+Cell[24589, 745, 143, 1, 44, "Subsection"],
+Cell[24735, 748, 120, 1, 30, "Text"],
+Cell[24858, 751, 962, 31, 63, "Input"],
+Cell[25823, 784, 285, 5, 30, "Text"],
+Cell[26111, 791, 2587, 69, 182, "Input"],
+Cell[28701, 862, 124, 1, 30, "Text"],
+Cell[28828, 865, 425, 13, 46, "Input"],
+Cell[29256, 880, 108, 1, 30, "Text"],
+Cell[29367, 883, 434, 13, 28, "Input"],
+Cell[29804, 898, 161, 2, 30, "Text"],
+Cell[29968, 902, 854, 26, 46, "Input"],
+Cell[30825, 930, 459, 8, 30, "Text"],
+Cell[31287, 940, 359, 7, 28, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31683, 952, 121, 1, 44, "Subsection"],
+Cell[31807, 955, 177, 4, 30, "Text"],
+Cell[31987, 961, 817, 18, 28, "Input"],
+Cell[32807, 981, 705, 15, 35, "Input"],
+Cell[33515, 998, 2221, 57, 131, "Input"],
+Cell[CellGroupData[{
+Cell[35761, 1059, 362, 8, 28, "Input"],
+Cell[36126, 1069, 12393, 302, 264, "Output"]
+}, Open  ]],
+Cell[48534, 1374, 182, 4, 30, "Text"],
+Cell[CellGroupData[{
+Cell[48741, 1382, 180, 4, 28, "Input"],
+Cell[48924, 1388, 163, 3, 28, "Output"]
+}, Open  ]],
+Cell[49102, 1394, 120, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[49247, 1399, 303, 9, 28, "Input"],
+Cell[49553, 1410, 1896, 58, 228, "Output"]
+}, Open  ]],
+Cell[51464, 1471, 165, 2, 30, "Text"],
+Cell[CellGroupData[{
+Cell[51654, 1477, 355, 10, 28, "Input"],
+Cell[52012, 1489, 5051, 144, 228, "Output"]
+}, Open  ]],
+Cell[57078, 1636, 122, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[57225, 1641, 149, 3, 28, "Input"],
+Cell[57377, 1646, 72, 1, 28, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
