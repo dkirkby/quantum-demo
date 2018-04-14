@@ -2,6 +2,7 @@
 
 - Quantum measurement with Schrödinger's coin: [app](https://dkirkby.github.io/quantum-coin/) &#124; [details](https://github.com/dkirkby/quantum-coin/blob/master/README.md)
 - Superposition of stationary states: [animated](media/superposition.gif) &#124; [spacetime](media/superposition_xt.png)
+- Evolution of arbitrary initial states on a classical string and quantum infinite square well: [animated](media/isw.mp4) &#124; [notebook](jupyter/InfiniteSquareWell.ipynb)
 - Classical and quantum probability densities in harmonic oscillator potential: [animated](media/harmonic.gif)
 - Solutions to Schrödinger's equation in regions of constant potential: [animated](media/V0solns.gif)
 - Solutions to Schrödinger's equation in finite step potentials: [animated](media/stepPsi.gif) &#124; [potentials](media/stepV.png)
