@@ -4,6 +4,11 @@
 - Superposition of stationary states: [animated](media/superposition.gif) &#124; [spacetime](media/superposition_xt.png)
 - Evolution of arbitrary initial states on a classical string and quantum infinite square well: [animated](media/isw.mp4) &#124; [notebook](https://github.com/dkirkby/quantum-demo/blob/master/jupyter/InfiniteSquareWell.ipynb)
 - Classical and quantum probability densities in harmonic oscillator potential: [animated](media/harmonic.gif)
+- Gaussian quantum wavepacket superposition for a free particle in 1D:
+[V0<0](media/wavepacket0.mp4) &#124;
+[V0=0](media/wavepacket1.mp4) &#124;
+[V0>0](media/wavepacket2.mp4) &#124;
+[notebook](https://github.com/dkirkby/quantum-demo/blob/master/jupyter/WavePacket.ipynb)
 - Solutions to Schrödinger's equation in regions of constant potential: [animated](media/V0solns.gif)
 - Solutions to Schrödinger's equation in finite step potentials: [animated](media/stepPsi.gif) &#124; [potentials](media/stepV.png)
 - Graphical method to find bound state solutions: [animated](media/stepBound.gif)
