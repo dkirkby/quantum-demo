@@ -12,6 +12,7 @@
 - Solutions to Schrödinger's equation in regions of constant potential: [animated](media/V0solns.gif)
 - Solutions to Schrödinger's equation in finite step potentials: [animated](media/stepPsi.gif) &#124; [potentials](media/stepV.png)
 - Graphical method to find bound state solutions: [animated](media/stepBound.gif)
+- Time evolution and measurement in a two-state system: [notebook](https://github.com/dkirkby/quantum-demo/blob/master/jupyter/TwoStateEvolution.ipynb).
 - Spherical harmonic decomposition of the earth's surface: [animated](media/topoYlm.html)
 - Probability densities of hydrogen stationary states in the (x,z) plane:
   - [n = 1,2,3 states showing ±25 a0](media/hydrogen123.png)
