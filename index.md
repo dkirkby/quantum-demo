@@ -22,4 +22,4 @@
 - Addition of angular momentum J = L+S for an electron (s=1/2) in a p-wave (ell=1): [image](media/jAdd.png)
 - [Table of 3D commutators](media/Commutators.pdf): Entry at row,col gives the commutator [row,col]. Hamiltonian commutators assume a central potential.
 - 3D probability densities of superpositions of hydrogen stationary states (link will be added).
-- Time-independent perturbation of a 1D infinite square well: [notebook](https://github.com/dkirkby/quantum-demo/blob/master/jupyter/PerturbationTheory.ipynb).
+- Time-independent perturbation of a 1D infinite square well: [notebook](https://github.com/dkirkby/quantum-demo/blob/master/jupyter/PerturbTheory.ipynb).
